@@ -149,24 +149,6 @@ exports.deleteAll = (req, res) => {
       });
     });
 };
-exports.findShreyaAmount = (req, res) => {
-  const amount = req.params.id;
-  var condition = amount ? { amount: { $regex: new RegExp(amount), $options: "i" } } : {};
-  var shreyaAmount =   kidsdb.find(condition);
- 
-  shreyaAmount.then(data => {
-    kidsdbs = data;
-
-    var TSA = 0;
-    TSA = TSA + shreyaAmount;
-   
-     
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while retrieving tutorials."
-        });
-      });
   
 
 exports.findAllVisible = (req, res) => {
