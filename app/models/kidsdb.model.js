@@ -6,7 +6,8 @@ module.exports = mongoose => {
                 
                 name: String,
                 chores: String,
-                amount: Number
+                amount: Number,
+                done: String
                
             },
             { timestamps: true }

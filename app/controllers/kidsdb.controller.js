@@ -13,11 +13,12 @@ exports.create = (req, res) => {
 
   // Create a Tutorial
   const kidsDB = new kidsdb({
-    
+
     name: req.body.name,
     chores: req.body.chores,
-    amount: req.body.amount
-    
+    amount: req.body.amount,
+    done: req.body.done
+
   });
 
   // Save Tutorial in the database
@@ -33,7 +34,6 @@ exports.create = (req, res) => {
       });
     });
 };
-
 
 
 exports.findAll = (req, res) => {
@@ -55,6 +55,9 @@ exports.findAll = (req, res) => {
     });
 };
 
+
+
+
 exports.findOne = (req, res) => {
   const name = req.params.id;
 
@@ -72,22 +75,136 @@ exports.findOne = (req, res) => {
     });
 };
 
-exports.findbyname = (req, res) => {
-    const findbyname = req.params.id;
-  
-    var condition = name ? { name: { $regex: new RegExp(name), $options: "i" } } : {};
-  
-    kidsdb.find(condition)
-      .then(data => {
-        res.send(data);
+
+
+exports.sumbyname = (req, res) => {
+  const name = req.params.name;
+
+  var condition = name ? { name: { $regex: new RegExp(name), $options: "i" } } : {};
+
+  // kidsdb.find(condition)
+  kidsdb.find({ name: name, done: "Yes" })
+    .then(data => {
+      kidsdata = data;
+      var KidsSum = 0;
+
+      kidsdata.forEach(item => {
+        KidsSum = item.amount + KidsSum;
       })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while retrieving tutorials."
-        });
+      res.send({ name: name, KidsSum: KidsSum });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving tutorials."
       });
-  };
+
+    });
+};
+
+exports.sumchorebyname = (req, res) => {
+  const name = req.params.name;
+
+  var condition = name ? { name: { $regex: new RegExp(name), $options: "i" } } : {};
+
+  // kidsdb.find(condition)
+  var chore = kidsdb.find({ name: name, done: "Yes" })
+    .then(data => {
+      kidsdata = data;
+      var sumofchore = {chores: []}
+      kidsdata.forEach(item => {
+        var choreObj = {
+          chore: item.chore
+        }
+
+      })
+         res.send({ sumofchore});
+      // kidsdata = data;
+      // var KidsSum = 0;
+
+      // kidsdata.forEach(item => {
+      //   KidsSum = item.amount + KidsSum;
+      // })
+      // res.send({ name: name, KidsSum: KidsSum });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving tutorials."
+      });
+
+    });
+};
+exports.sumbydone = (req, res) => {
+  const done = req.params.done;
+
+  var condition = done ? { done: { $regex: new RegExp(done), $options: "i" } } : {};
+
+  // kidsdb.find(condition)
+  kidsdb.find({ done: done })
+    .then(data => {
+      kidsdata = data;
+      var allKidsSum = 0;
+
+      kidsdata.forEach(item => {
+        allKidsSum = item.amount + allKidsSum;
+      })
+      res.send({ done: done, allKidsSum: allKidsSum });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving tutorials."
+      });
+
+    });
+};
+
+exports.balance = (req, res) => {
+  const done = req.params.done;
+
+  var condition = done ? { done: { $regex: new RegExp(done), $options: "i" } } : {};
+
+  // kidsdb.find(condition)
+  kidsdb.find({ done: done })
+    .then(data => {
+      kidsdata = data;
+      var balance;
+      var allKidsSum = 0;
+
+      kidsdata.forEach(item => {
+        (balance = 150-(allKidsSum = item.amount + allKidsSum));
+      })
+      res.send({ done: done, balance: balance });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving tutorials."
+      });
+
+    });
+};
+exports.findChores = (req, res) => {
+  const name = req.params.id;
+
+  var condition = name ? { name: { $regex: new RegExp(name), $options: "i" } } : {};
+  var mysort = { chores: -1 };
+
+  kidsdb.find(condition).sort(mysort)
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving tutorials."
+      });
+    });
+};
+
+
+
 
 exports.update = (req, res) => {
   if (!req.body) {
@@ -146,38 +263,6 @@ exports.deleteAll = (req, res) => {
       res.status(500).send({
         message:
           err.message || "Some error occurred while removing all tutorials."
-      });
-    });
-};
-exports.findShreyaAmount = (req, res) => {
-  const amount = req.params.id;
-  var condition = amount ? { amount: { $regex: new RegExp(amount), $options: "i" } } : {};
-  var shreyaAmount =   kidsdb.find(condition);
- 
-  shreyaAmount.then(data => {
-    kidsdbs = data;
-
-    var TSA = 0;
-    TSA = TSA + shreyaAmount;
-   
-     
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while retrieving tutorials."
-        });
-      });
-  
-
-exports.findAllVisible = (req, res) => {
-  kisdb.find({ menuitemvisible: true })
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving tutorials."
       });
     });
 };

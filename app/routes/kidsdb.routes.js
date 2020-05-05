@@ -9,7 +9,22 @@ module.exports = app => {
     // Retrieve all Tutorials
     router.get("/", kidsdb.findAll);
 
-    router.get("/amount/:id", kidsdb.findShreyaAmount);
+    // Retrieve sum of all done work 
+    router.get("/sumbydone/:done", kidsdb.sumbydone);
+
+     // Retrieve sum of all done work 
+     router.get("/balance/:done", kidsdb.balance);
+     
+     // Retrieve sum of all amount by kid name
+    router.get("/sumbyname/:name", kidsdb.sumbyname);
+    
+     // Retrieve sum of all chore by kid name
+     router.get("/sumchorebyname/:name", kidsdb.sumchorebyname);
+
+    // Retrieve all Tutorials
+    router.get("/chores", kidsdb.findChores);
+
+    //router.get("/amount/:id", kidsdb.findShreyaAmount);
 
     // Retrieve a single Tutorial with id
     router.get("/:id", kidsdb.findOne);

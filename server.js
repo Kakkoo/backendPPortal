@@ -41,6 +41,6 @@ require("./app/routes/kidsdb.routes")(app);
 
 
 app.listen(PORT, () => {
-    console.log('Server is running port ${PORT} .');
+    console.log('Server is running on port ' + PORT);
 });
 
