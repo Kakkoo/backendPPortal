@@ -111,11 +111,12 @@ exports.sumchorebyname = (req, res) => {
   var chore = kidsdb.find({ name: name, done: "Yes" })
     .then(data => {
       kidsdata = data;
-      var sumofchore = {chores: []}
+      var sumofchore = {kidsdbs: []}
       kidsdata.forEach(item => {
         var choreObj = {
-          chore: item.chore
+          chores: item.chores
         }
+        sumofchore.kidsdbs.push(choreObj);
 
       })
          res.send({ sumofchore});
