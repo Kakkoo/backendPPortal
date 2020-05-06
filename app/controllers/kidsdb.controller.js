@@ -80,7 +80,7 @@ exports.findOne = (req, res) => {
 exports.sumbyname = (req, res) => {
   const name = req.params.name;
 
-  var condition = name ? { name: { $regex: new RegExp(name), $options: "i" } } : {};
+  //var condition = name ? { name: { $regex: new RegExp(name), $options: "i" } } : {};
 
   // kidsdb.find(condition)
   kidsdb.find({ name: name, done: "Yes" })
@@ -104,30 +104,23 @@ exports.sumbyname = (req, res) => {
 
 exports.sumchorebyname = (req, res) => {
   const name = req.params.name;
-
-  var condition = name ? { name: { $regex: new RegExp(name), $options: "i" } } : {};
-
-  // kidsdb.find(condition)
   var chore = kidsdb.find({ name: name, done: "Yes" })
-    .then(data => {
-      kidsdata = data;
-      var sumofchore = {kidsdbs: []}
-      kidsdata.forEach(item => {
-        var choreObj = {
-          chores: item.chores
-        }
-        sumofchore.kidsdbs.push(choreObj);
+  var sumofchore = { kidsdbs: [], kidname: {} }
+  chore.then(data => {
+    kidsdata = data;
 
-      })
-         res.send({ sumofchore});
-      // kidsdata = data;
-      // var KidsSum = 0;
+    kidsdata.forEach(item => {
+      var choreObj = {
+        chores: item.chores
+      }
 
-      // kidsdata.forEach(item => {
-      //   KidsSum = item.amount + KidsSum;
-      // })
-      // res.send({ name: name, KidsSum: KidsSum });
+      sumofchore.kidsdbs.push(choreObj);
+
     })
+    var kidname = { name: name };
+    sumofchore.kidname = kidname;
+    res.send({ sumofchore });
+  })
     .catch(err => {
       res.status(500).send({
         message:
@@ -174,7 +167,7 @@ exports.balance = (req, res) => {
       var allKidsSum = 0;
 
       kidsdata.forEach(item => {
-        (balance = 150-(allKidsSum = item.amount + allKidsSum));
+        (balance = 150 - (allKidsSum = item.amount + allKidsSum));
       })
       res.send({ done: done, balance: balance });
     })
