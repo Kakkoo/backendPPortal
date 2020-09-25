@@ -1,15 +1,13 @@
 module.exports = (mongoose) => {
-  const kidsDB = mongoose.model(
-    "kidsDB",
+  const namepasswordDB = mongoose.model(
+    "namepasswordDB",
     mongoose.Schema(
       {
         name: String,
-        chores: String,
-        amount: Number,
-        done: String,
+        password: Number
       },
       { timestamps: true }
     )
   );
-  return kidsDB;
+  return namepasswordDB;
 };
