@@ -252,8 +252,23 @@ exports.deleteAll = (req, res) => {
     .deleteMany({})
     .then((data) => {
       res.send({
-        message: `${data.deletedCount} Tutorials were deleted successfully!`,
+        message: `${data.deletedCount} Tutorials were deleted successfully!`
       });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while removing all tutorials."
+      });
+    });
+};
+  
+
+exports.findAllVisible = (req, res) => {
+  kisdb.find({ menuitemvisible: true })
+    .then(data => {
+      res.send(data);
+
     })
     .catch((err) => {
       res.status(500).send({
